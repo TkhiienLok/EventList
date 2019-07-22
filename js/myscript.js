@@ -3,12 +3,10 @@ $(document).ready(function($)
 	//ajax row data
 	var ajax_data =
 	[
-		{title:"Event 1", date:"20.08.2019", start:"9:00", end:"12:00"}, 
-		{title:"Event 2", date:"25.08.2019", start:"15:00", end:"17:00"}, 
+		{title:"Event 1", date:"2019-08-02", start:"9:00", end:"12:00"}, 
+		{title:"Event 2", date:"2019-09-25", start:"15:00", end:"17:00"}, 
 		
 	]
-
-
 
 	var random_id = function  () 
 	{
@@ -16,7 +14,17 @@ $(document).ready(function($)
 		var id_str = Math.random().toString(36).substr(2);
 		
 		return id_num + id_str;
-	}
+    }
+
+    var defineDate = function(){
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+
+        today = yyyy + '-' + mm + '-' + dd;
+        return today;
+    }
 
 
 	//--->create data table > start
@@ -42,12 +50,19 @@ $(document).ready(function($)
 			$.each(ajax_data, function(index, val) 
 			{
 				//you can replace with your database row id
-				var row_id = random_id();
+                // var row_id = random_id();
+                var row_id = index;
+                val.date = new Date(val.date);
+                var day = String(val.date.getDate()).padStart(2, '0');
+                var m = String(val.date.getMonth() + 1).padStart(2, '0'); //January is 0!
+                var year = val.date.getFullYear();
+                
+                var dayStr = day + '.' + m + '.' + year;
 
 				//loop through ajax row data
 				tbl +='<tr row_id="'+row_id+'">';
 					tbl +='<td ><div class="row_data" edit_type="click" col_name="title">'+val['title']+'</div></td>';
-					tbl +='<td ><div class="row_data" edit_type="click" col_name="date">'+val['date']+'</div></td>';
+					tbl +='<td ><div class="row_data" edit_type="click" col_name="date">'+dayStr+'</div></td>';
                     tbl +='<td ><div class="row_data" edit_type="click" col_name="start">'+val['start']+'</div></td>';
                     tbl +='<td ><div class="row_data" edit_type="click" col_name="end">'+val['end']+'</div></td>';
 
@@ -248,14 +263,22 @@ $(document).ready(function($)
         $inputs.each(function() {
           values[this.id] = $(this).val();
         });
+        values.date = new Date(values.date);
+        var day = String(values.date.getDate()).padStart(2, '0');
+        var m = String(values.date.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var year = values.date.getFullYear();
+        
+        var dayStr = day + '.' + m + '.' + year;
 
-        var row_id = random_id();
+        // var row_id = random_id();
+        var row_id = ajax_data.length + 1;
+        
         ajax_data.push(values);      
         
         //add the row
         $('#displayArea').append('<tr row_id="'+row_id+'"><td> <div class="row_data" edit_type="click" col_name="title">' + 
         values.title + '</div></td><td><div class="row_data" edit_type="click" col_name="date">' + 
-        values.date + '</div></td><td><div class="row_data" edit_type="click" col_name="start">' + 
+        dayStr + '</div></td><td><div class="row_data" edit_type="click" col_name="start">' + 
         values.start + '</div></td><td><div class="row_data" edit_type="click" col_name="end">' + 
         values.end + '</div></td>'+
         '<td>'+'<span class="btn_edit" > <a href="#" class="btn btn-link " row_id="'+row_id+'" > Edit</a> </span>'+
@@ -268,9 +291,15 @@ $(document).ready(function($)
 	    $(document).find('.btn_cancel').hide(); 
       });
     
+    //delete event row
     $('#displayArea').on('click','.btn_remove', function(){
+        var trow = $(this).closest('tr');
+        // ajax_data.pop(trow.attr('row_id'));
         $(this).closest('tr').remove();
     })
+
+
+    $('#date').val(defineDate());
 
 
 }); 
