@@ -62,18 +62,18 @@ body {
     width: 7px;
   }
   
-  /* Style the close button */
-  .close {
-    position: absolute;
-    right: 0;
-    top: 0;
-    padding: 12px 16px 12px 16px;
-  }
-  
-  .close:hover {
-    background-color: #f44336;
-    color: white;
-  }
+.tbl_user_data {
+    text-align: center;
+}
+
+th {
+    text-align: center;
+}
+
+#myForm {
+    text-align: center;
+}
+
   .edit {
       position: absolute;
       right: 30;
@@ -108,7 +108,6 @@ body {
     border-radius: 0;
     width: 75%;
     padding: 10px;
-    float: left;
     font-size: 16px;
   }
   

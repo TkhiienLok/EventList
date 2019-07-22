@@ -58,7 +58,8 @@ $(document).ready(function($)
 
 						//only show this button if edit button is clicked
 						tbl +='<span class="btn_save"> <a href="#" class="btn btn-link"  row_id="'+row_id+'"> Save</a> | </span>';
-						tbl +='<span class="btn_cancel"> <a href="#" class="btn btn-link" row_id="'+row_id+'"> Cancel</a> | </span>';
+                        tbl +='<span class="btn_cancel"> <a href="#" class="btn btn-link" row_id="'+row_id+'"> Cancel</a> | </span>';
+                        tbl +='<button type="button" class="btn_remove" row_id="'+row_id+'"> Remove </button>';
 
 					tbl +='</td>';
 					//--->edit options > end
@@ -239,16 +240,7 @@ $(document).ready(function($)
 	});
     //--->save whole row entery > end
     
-    //when pressing add span
-    $(document).on('click', '.addBtn', function(event) 
-	{
-        name = document.getElementById("myInput").value;
-
-        ajax_data.push({fname:name, lname:"Anonim", email:"johndoe@gmail.com"});
-        console.log(ajax_data);
-        // $('#myTable').append('<tr><td>my data</td><td>more data</td></tr>');
-    });
-
+    //add event from form
     $('#myForm').submit(function(event) {
         event.preventDefault();
         var $inputs = $('#myForm :input');
@@ -258,7 +250,9 @@ $(document).ready(function($)
         });
 
         var row_id = random_id();
-
+        ajax_data.push(values);      
+        
+        //add the row
         $('#displayArea').append('<tr row_id="'+row_id+'"><td> <div class="row_data" edit_type="click" col_name="title">' + 
         values.title + '</div></td><td><div class="row_data" edit_type="click" col_name="date">' + 
         values.date + '</div></td><td><div class="row_data" edit_type="click" col_name="start">' + 
@@ -266,12 +260,17 @@ $(document).ready(function($)
         values.end + '</div></td>'+
         '<td>'+'<span class="btn_edit" > <a href="#" class="btn btn-link " row_id="'+row_id+'" > Edit</a> </span>'+
         '<span class="btn_save"> <a href="#" class="btn btn-link"  row_id="'+row_id+'"> Save</a> | </span>'+
-        '<span class="btn_cancel"> <a href="#" class="btn btn-link" row_id="'+row_id+'"> Cancel</a> | </span>'+'</td>'+
+        '<span class="btn_cancel"> <a href="#" class="btn btn-link" row_id="'+row_id+'"> Cancel</a> | </span>'+
+        '<button type="button" class="btn_remove" row_id=">'+row_id+'"> Remove </button>'+'</td>'+
         '</tr>');
         $("input[type=text], textarea").val("");
         $(document).find('.btn_save').hide();
 	    $(document).find('.btn_cancel').hide(); 
       });
+    
+    $('#displayArea').on('click','.btn_remove', function(){
+        $(this).closest('tr').remove();
+    })
 
 
 }); 
