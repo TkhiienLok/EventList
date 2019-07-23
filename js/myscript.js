@@ -3,8 +3,8 @@ $(document).ready(function($)
 	//ajax row data
 	var ajax_data =
 	[
-		{title:"Event 1", date:"2019-08-02", start:"9:00", end:"12:00"}, 
-		{title:"Event 2", date:"2019-09-25", start:"15:00", end:"17:00"}, 
+		{id: 0, title:"Event 1", date:"2019-08-02", start:"9:00", end:"12:00"}, 
+		{id: 1, title:"Event 2", date:"2019-09-25", start:"15:00", end:"17:00"}, 
 		
 	]
 
@@ -61,9 +61,6 @@ $(document).ready(function($)
 				var year = val.date.getFullYear();
 				var startTime = String(val.start.getHours()).padStart(2, '0')+':'+String(val.start.getMinutes()).padStart(2, '0');
 				var endTime = String(val.end.getHours()).padStart(2, '0')+':'+String(val.end.getMinutes()).padStart(2, '0');
-                
-				//var dayStr = day + '.' + m + '.' + year;
-				
 
 				//loop through ajax row data
 				tbl +='<tr row_id="'+row_id+'">';
@@ -98,7 +95,6 @@ $(document).ready(function($)
 
 	//out put table data
 	$(document).find('.tbl_user_data').html(tbl);
-
 	$(document).find('.btn_save').hide();
 	$(document).find('.btn_cancel').hide(); 
 
@@ -140,18 +136,6 @@ $(document).ready(function($)
 		var row_div = $(this)				
 		.removeClass('bg-warning') //add bg css
 		.css('padding','')
-
-		var col_name = row_div.attr('col_name'); 
-		var col_val = row_div.html(); 
-
-		var arr = {};
-		arr[col_name] = col_val;
-
-		//use the "arr"	object for your ajax call
-		$.extend(arr, {row_id:row_id});
-
-		//out put to show
-		$('.post_msg').html( '<pre class="bg-success">'+JSON.stringify(arr, null, 2) +'</pre>');
 		
 	})	
 	//--->save single field data > end
@@ -226,7 +210,6 @@ $(document).ready(function($)
 	{
 		event.preventDefault();
 		var tbl_row = $(this).closest('tr');
-
 		var row_id = tbl_row.attr('row_id');
 
 		
@@ -270,10 +253,9 @@ $(document).ready(function($)
         var $inputs = $('#myForm :input');
         var values = {};
         $inputs.each(function() {
-		  values[this.id] = $(this).val();
-		  $(this).val('');
+		  values[this.id] = $(this).val();		  
         });
-		
+		$(this).children("input[type=time]").val(0);
 		
 		values.start = new Date(values.date+' '+values.start);	
 		values.end = new Date(values.date+' '+values.end);
@@ -283,12 +265,11 @@ $(document).ready(function($)
         var m = String(values.date.getMonth() + 1).padStart(2, '0'); //January is 0!
         var year = values.date.getFullYear();
 		var startTime = String(values.start.getHours()).padStart(2, '0')+':'+String(values.start.getMinutes()).padStart(2, '0');
-		var endTime = String(values.end.getHours()).padStart(2, '0')+':'+String(values.end.getMinutes()).padStart(2, '0');
-		// var dayStr = day + '.' + m + '.' + year;		
+		var endTime = String(values.end.getHours()).padStart(2, '0')+':'+String(values.end.getMinutes()).padStart(2, '0');	
         
         // var row_id = random_id();
-        var row_id = ajax_data.length + 1;
-        
+        var row_id = ajax_data.length;
+        values.id = row_id;
         ajax_data.push(values);      
         
         //add the row
@@ -309,9 +290,13 @@ $(document).ready(function($)
     
     //delete event row
     $('#displayArea').on('click','.btn_remove', function(){
-        var trow = $(this).closest('tr');
-        // ajax_data.pop(trow.attr('row_id'));
-        $(this).closest('tr').remove();
+		var trow = $(this).closest('tr');
+		console.log(trow.attr('row_id'));
+		var ind = ajax_data.findIndex(x => x.id == trow.attr('row_id'));
+		console.log(ind);
+        ajax_data.splice(ind, 1);
+		$(this).closest('tr').remove();
+		console.log(ajax_data);
     })
 
 

@@ -2,8 +2,8 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css"> -->
 <link href="css/styles.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 <script src="js/myscript.js"></script>
@@ -11,17 +11,16 @@
 </head>
 <body>
 <div class="panel panel-default">
-  <div class="panel-heading"><b> Demo </b> </div>
 
   <div class="panel-body">
         <div id="myDIV" class="header">
-            <h2 style="margin:5px">Add Event</h2>
-            <form action="" method="post" id="myForm">
-                <input type="text" id="title" placeholder="Title..."><br/><br/>
-                <input type="date" value="" min="2018-01-01" max="2025-12-31" id="date" ><br/><br/>
-                <input type="time" id="start" min="09:00" max="18:00" required><br/><br/>
-                <input type="time" id="end" min="09:00" max="18:00" required><br/><br/>
-                <input type="submit" name="sub" value="Add">
+            <h3 style="margin:5px">Add Event</h3>
+            <form action="" method="post" id="myForm" class="form-inline">
+                <input type="text" id="title" class="form-control" placeholder="Title..."><br/>
+                <input type="date" value="" min="2018-01-01" max="2025-12-31" id="date" class="form-control" ><br/>
+                <input type="time" id="start" class="form-control" min="09:00" max="18:00" required><br/>
+                <input type="time" id="end" class="form-control" min="09:00" max="18:00" required><br/>
+                <input type="submit" class="form-control addBtn" name="sub" value="Add">
             </form>
 
             <!-- <span class="addBtn">Add</span> -->
@@ -35,7 +34,7 @@
 
  
 
-<div class="panel panel-default">
+<!-- <div class="panel panel-default">
   <div class="panel-heading"><b>HTML Table Edits/Upates</b> </div>
 
   <div class="panel-body">
@@ -44,7 +43,7 @@
 	<div class="post_msg"> </div>
 
   </div>
-</div>
+</div> -->
 
 </body>
 </html>
