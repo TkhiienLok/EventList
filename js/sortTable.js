@@ -7,8 +7,8 @@ function sortTable(id) {
         rows = $('table tbody').find('tr');
         for (i = 0; i < (rows.length - 1); i++) { 
             // Fetch 2 elements that need to be compared 
-            x = new Date(rows[i].cells[1].children[0].value); 
-            y = new Date(rows[i + 1].cells[1].children[0].value);
+            x = new Date(rows[i].cells[1].children[0].value + ' '+ rows[i].cells[2].children[0].value); 
+            y = new Date(rows[i + 1].cells[1].children[0].value + ' '+ rows[i + 1].cells[2].children[0].value);
             
             // Check if 2 rows need to be switched 
             if (x > y){ 
