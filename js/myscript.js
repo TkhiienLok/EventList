@@ -29,7 +29,7 @@ $(document).ready(function($)
 
 	//--->create data table > start
 	var tbl = '';
-	tbl +='<table class="table table-hover">'
+	tbl +='<table class="table table-hover sortable">'
 
 		//--->create table header > start
 		tbl +='<thead>';
