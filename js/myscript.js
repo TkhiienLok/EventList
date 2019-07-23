@@ -24,12 +24,23 @@ $(document).ready(function($)
 
         today = yyyy + '-' + mm + '-' + dd;
         return today;
+	}
+	
+	//format date string
+    var formatDate = function(str){
+        var day = new Date(str);
+        var dd = String(day.getDate()).padStart(2, '0');
+        var mm = String(day.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = day.getFullYear();
+
+        formattedDay = dd+'.'+mm+'.'+yyyy;
+        return formattedDay;
     }
 
 
 	//--->create data table > start
 	var tbl = '';
-	tbl +='<table class="table table-hover sortable">'
+	tbl +='<table id="#myTable" class="table table-hover sortable">'
 
 		//--->create table header > start
 		tbl +='<thead>';
@@ -56,9 +67,6 @@ $(document).ready(function($)
 				val.end = new Date(val.date+' '+val.end);
 				var dayStr = val.date;
                 val.date = new Date(val.date);
-                var day = String(val.date.getDate()).padStart(2, '0');
-                var m = String(val.date.getMonth() + 1).padStart(2, '0'); //January is 0!
-				var year = val.date.getFullYear();
 				var startTime = String(val.start.getHours()).padStart(2, '0')+':'+String(val.start.getMinutes()).padStart(2, '0');
 				var endTime = String(val.end.getHours()).padStart(2, '0')+':'+String(val.end.getMinutes()).padStart(2, '0');
 
@@ -82,7 +90,12 @@ $(document).ready(function($)
 					tbl +='</td>';
 					//--->edit options > end
 					
+				//fill in select width dates	
 				tbl +='</tr>';
+				$('#mySelect')
+				.append($("<option></option>")
+                    .attr("value",index)
+					.text(formatDate(val.date)));
 			});
 
 			//--->create table body rows > end
@@ -261,9 +274,6 @@ $(document).ready(function($)
 		values.end = new Date(values.date+' '+values.end);
 		var dayStr = values.date;
 		values.date = new Date(values.date);
-        var day = String(values.date.getDate()).padStart(2, '0');
-        var m = String(values.date.getMonth() + 1).padStart(2, '0'); //January is 0!
-        var year = values.date.getFullYear();
 		var startTime = String(values.start.getHours()).padStart(2, '0')+':'+String(values.start.getMinutes()).padStart(2, '0');
 		var endTime = String(values.end.getHours()).padStart(2, '0')+':'+String(values.end.getMinutes()).padStart(2, '0');	
         
@@ -282,25 +292,47 @@ $(document).ready(function($)
         '<span class="btn_save"> <a href="#" class="btn btn-link"  row_id="'+row_id+'"> Save</a> | </span>'+
         '<span class="btn_cancel"> <a href="#" class="btn btn-link" row_id="'+row_id+'"> Cancel</a> | </span>'+
         '<button type="button" class="btn_remove" row_id=">'+row_id+'"> Remove </button>'+'</td>'+
-        '</tr>');
+		'</tr>');
+
         $("input[type=text], textarea").val("");
         $(document).find('.btn_save').hide();
-	    $(document).find('.btn_cancel').hide(); 
+		$(document).find('.btn_cancel').hide(); 
+		
+		//fill in select
+		$('#mySelect')
+			.append($("<option></option>")
+				.attr("value",row_id)
+				.text(formatDate(values.date)));
       });
     
-    //delete event row
+    //delete event row and option in select
     $('#displayArea').on('click','.btn_remove', function(){
 		var trow = $(this).closest('tr');
-		console.log(trow.attr('row_id'));
 		var ind = ajax_data.findIndex(x => x.id == trow.attr('row_id'));
-		console.log(ind);
         ajax_data.splice(ind, 1);
 		$(this).closest('tr').remove();
-		console.log(ajax_data);
+		$('#mySelect').children("option")[ind].remove();
     })
+	
 
 
-    $('#date').val(defineDate());
+	$('#date').val(defineDate());
+	var selection = null;
+	$('#mySelect').change(function() {
+		$('#myTable').show();
+		var selection = $(this).val();
+		var dataset = $('table tbody').find('tr');
+		// show all rows first
+		dataset.show();
 
+		selectedDate = formatDate(ajax_data[selection].date);
+        // hide rows with another date
+		dataset.filter(function(index, item) {
+			cellDate = formatDate($(item).find('td').children("input[type=date]")[0].value);
+			return cellDate != selectedDate;
+		}).hide();
+	
+	  });
+	
 
 }); 
