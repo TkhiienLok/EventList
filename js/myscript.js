@@ -40,7 +40,7 @@ $(document).ready(function($)
 
 	//--->create data table > start
 	var tbl = '';
-	tbl +='<table id="#myTable" class="table table-hover sortable">'
+	tbl +='<table id="#myTable" class="table table-hover sortable sorted">'
 
 		//--->create table header > start
 		tbl +='<thead>';
@@ -280,8 +280,8 @@ $(document).ready(function($)
         // var row_id = random_id();
         var row_id = ajax_data.length;
         values.id = row_id;
-        ajax_data.push(values);      
-        
+		ajax_data.push(values);  
+		    
         //add the row
         $('#displayArea').append('<tr row_id="'+row_id+'"><td> <div class="row_data" edit_type="click" col_name="title">' + 
         values.title + '</div></td><td><input type="date" min="2018-01-01" max="2025-12-31" class="row_data" edit_type="click" col_name="date" value="' + 
@@ -315,17 +315,15 @@ $(document).ready(function($)
     })
 	
 
-
 	$('#date').val(defineDate());
-	var selection = null;
 	$('#mySelect').change(function() {
 		$('#myTable').show();
 		var selection = $(this).val();
 		var dataset = $('table tbody').find('tr');
 		// show all rows first
 		dataset.show();
-
-		selectedDate = formatDate(ajax_data[selection].date);
+		var dateInd = ajax_data.findIndex(x => x.id == selection);
+		selectedDate = formatDate(ajax_data[dateInd].date);
         // hide rows with another date
 		dataset.filter(function(index, item) {
 			cellDate = formatDate($(item).find('td').children("input[type=date]")[0].value);
