@@ -275,35 +275,39 @@ $(document).ready(function($)
 		values.date = new Date(values.date);
 		var startTime = String(values.start.getHours()).padStart(2, '0')+':'+String(values.start.getMinutes()).padStart(2, '0');
 		var endTime = String(values.end.getHours()).padStart(2, '0')+':'+String(values.end.getMinutes()).padStart(2, '0');	
-        
-        // var row_id = random_id();
-        var row_id = ajax_data.length;
-        values.id = row_id;
-		ajax_data.push(values);  
-		    
-        //add the row
-        $('#displayArea').append('<tr row_id="'+row_id+'"><td> <div class="row_data" edit_type="click" col_name="title">' + 
-        values.title + '</div></td><td><input type="date" min="2018-01-01" max="2025-12-31" class="row_data" edit_type="click" col_name="date" value="' + 
-        dayStr + '" readonly></td><td><input type="time" min="09:00" max="18:00" class="row_data" edit_type="click" col_name="start" value="' + 
-        startTime + '"readonly></td><td><input type="time" min="09:00" max="18:00" class="row_data" edit_type="click" col_name="end" value="' + 
-        endTime + '" readonly></td>'+
-        '<td>'+'<span class="btn_edit" > <a href="#" class="btn btn-link " row_id="'+row_id+'" > Edit</a> </span>'+
-        '<span class="btn_save"> <a href="#" class="btn btn-link"  row_id="'+row_id+'"> Save</a> | </span>'+
-        '<span class="btn_cancel"> <a href="#" class="btn btn-link" row_id="'+row_id+'"> Cancel</a> | </span>'+
-        '<button type="button" class="btn_remove" row_id=">'+row_id+'"> Remove </button>'+'</td>'+
-		'</tr>');
 		
-		sortTable("myTable");
-		
-        $("input[type=text], textarea").val("");
-        $(document).find('.btn_save').hide();
-		$(document).find('.btn_cancel').hide(); 
-		
-		//fill in select
-		$('#mySelect')
-			.append($("<option></option>")
-				.attr("value",row_id)
-				.text(formatDate(values.date)));
+		var rowForEditting = checkOverlap(values.start, values.end);
+		if (rowForEditting === null){
+
+			// var row_id = random_id();
+			var row_id = ajax_data.length;
+			values.id = row_id;
+			ajax_data.push(values);  
+				
+			//add the row
+			$('#displayArea').append('<tr row_id="'+row_id+'"><td> <div class="row_data" edit_type="click" col_name="title">' + 
+			values.title + '</div></td><td><input type="date" min="2018-01-01" max="2025-12-31" class="row_data" edit_type="click" col_name="date" value="' + 
+			dayStr + '" readonly></td><td><input type="time" min="09:00" max="18:00" class="row_data" edit_type="click" col_name="start" value="' + 
+			startTime + '"readonly></td><td><input type="time" min="09:00" max="18:00" class="row_data" edit_type="click" col_name="end" value="' + 
+			endTime + '" readonly></td>'+
+			'<td>'+'<span class="btn_edit" > <a href="#" class="btn btn-link " row_id="'+row_id+'" > Edit</a> </span>'+
+			'<span class="btn_save"> <a href="#" class="btn btn-link"  row_id="'+row_id+'"> Save</a> | </span>'+
+			'<span class="btn_cancel"> <a href="#" class="btn btn-link" row_id="'+row_id+'"> Cancel</a> | </span>'+
+			'<button type="button" class="btn_remove" row_id=">'+row_id+'"> Remove </button>'+'</td>'+
+			'</tr>');
+			
+			sortTable("myTable");
+			
+			$("input[type=text], textarea").val("");
+			$(document).find('.btn_save').hide();
+			$(document).find('.btn_cancel').hide(); 
+			
+			//fill in select
+			$('#mySelect')
+				.append($("<option></option>")
+					.attr("value",row_id)
+					.text(formatDate(values.date)));
+		};
       });
     
     //delete event row and option in select
