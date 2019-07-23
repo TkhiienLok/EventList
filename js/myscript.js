@@ -1,5 +1,5 @@
 $(document).ready(function($)
-{
+{   
 	//ajax row data
 	var ajax_data =
 	[
@@ -35,8 +35,7 @@ $(document).ready(function($)
 
         formattedDay = dd+'.'+mm+'.'+yyyy;
         return formattedDay;
-    }
-
+	}
 
 	//--->create data table > start
 	var tbl = '';
@@ -293,7 +292,9 @@ $(document).ready(function($)
         '<span class="btn_cancel"> <a href="#" class="btn btn-link" row_id="'+row_id+'"> Cancel</a> | </span>'+
         '<button type="button" class="btn_remove" row_id=">'+row_id+'"> Remove </button>'+'</td>'+
 		'</tr>');
-
+		
+		sortTable("myTable");
+		
         $("input[type=text], textarea").val("");
         $(document).find('.btn_save').hide();
 		$(document).find('.btn_cancel').hide(); 
@@ -320,15 +321,18 @@ $(document).ready(function($)
 		$('#myTable').show();
 		var selection = $(this).val();
 		var dataset = $('table tbody').find('tr');
+		
 		// show all rows first
 		dataset.show();
-		var dateInd = ajax_data.findIndex(x => x.id == selection);
-		selectedDate = formatDate(ajax_data[dateInd].date);
-        // hide rows with another date
-		dataset.filter(function(index, item) {
-			cellDate = formatDate($(item).find('td').children("input[type=date]")[0].value);
-			return cellDate != selectedDate;
-		}).hide();
+		if (selection != 'All') {
+			var dateInd = ajax_data.findIndex(x => x.id == selection);
+			selectedDate = formatDate(ajax_data[dateInd].date);
+			// hide rows with another date
+			dataset.filter(function(index, item) {
+				cellDate = formatDate($(item).find('td').children("input[type=date]")[0].value);
+				return cellDate != selectedDate;
+			}).hide();
+		};
 	
 	  });
 	
