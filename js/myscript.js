@@ -51,20 +51,26 @@ $(document).ready(function($)
 			{
 				//you can replace with your database row id
                 // var row_id = random_id();
-                var row_id = index;
+				var row_id = index;
+				val.start = new Date(val.date+' '+val.start);	
+				val.end = new Date(val.date+' '+val.end);
+				var dayStr = val.date;
                 val.date = new Date(val.date);
                 var day = String(val.date.getDate()).padStart(2, '0');
                 var m = String(val.date.getMonth() + 1).padStart(2, '0'); //January is 0!
-                var year = val.date.getFullYear();
+				var year = val.date.getFullYear();
+				var startTime = String(val.start.getHours()).padStart(2, '0')+':'+String(val.start.getMinutes()).padStart(2, '0');
+				var endTime = String(val.end.getHours()).padStart(2, '0')+':'+String(val.end.getMinutes()).padStart(2, '0');
                 
-                var dayStr = day + '.' + m + '.' + year;
+				//var dayStr = day + '.' + m + '.' + year;
+				
 
 				//loop through ajax row data
 				tbl +='<tr row_id="'+row_id+'">';
 					tbl +='<td ><div class="row_data" edit_type="click" col_name="title">'+val['title']+'</div></td>';
-					tbl +='<td ><div class="row_data" edit_type="click" col_name="date">'+dayStr+'</div></td>';
-                    tbl +='<td ><div class="row_data" edit_type="click" col_name="start">'+val['start']+'</div></td>';
-                    tbl +='<td ><div class="row_data" edit_type="click" col_name="end">'+val['end']+'</div></td>';
+					tbl +='<td ><input type="date" min="2018-01-01" max="2025-12-31" class="row_data" edit_type="click" col_name="date" value="'+dayStr+'" readonly></td>';
+                    tbl +='<td ><input type="time" min="09:00" max="18:00" class="row_data" edit_type="click" col_name="start" value="'+startTime+'" readonly></td>';
+                    tbl +='<td ><input type="time" min="09:00" max="18:00"  class="row_data" edit_type="click" col_name="end" value="'+endTime+'" readonly></td>';
 
 					//--->edit options > start
 					tbl +='<td>';
@@ -109,6 +115,7 @@ $(document).ready(function($)
 
 		//make div editable
 		$(this).closest('div').attr('contenteditable', 'true');
+	    $(this).closest('input').attr('readonly', false);
 		//add bg css
 		$(this).addClass('bg-warning').css('padding','5px');
 
@@ -126,7 +133,8 @@ $(document).ready(function($)
 		{
 			return false; 
 		}
-
+		$(this).attr('readonly', true);
+		$('.tbl_user_data').attr('contenteditable', 'false');
 		var row_id = $(this).closest('tr').attr('row_id'); 
 		
 		var row_div = $(this)				
@@ -167,6 +175,7 @@ $(document).ready(function($)
 		tbl_row.find('.row_data')
 		.attr('contenteditable', 'true')
 		.attr('edit_type', 'button')
+		.attr('readonly', false)
 		.addClass('bg-warning')
 		.css('padding','3px')
 
@@ -261,15 +270,22 @@ $(document).ready(function($)
         var $inputs = $('#myForm :input');
         var values = {};
         $inputs.each(function() {
-          values[this.id] = $(this).val();
+		  values[this.id] = $(this).val();
+		  $(this).val('');
         });
-        values.date = new Date(values.date);
+		
+		
+		values.start = new Date(values.date+' '+values.start);	
+		values.end = new Date(values.date+' '+values.end);
+		var dayStr = values.date;
+		values.date = new Date(values.date);
         var day = String(values.date.getDate()).padStart(2, '0');
         var m = String(values.date.getMonth() + 1).padStart(2, '0'); //January is 0!
         var year = values.date.getFullYear();
+		var startTime = String(values.start.getHours()).padStart(2, '0')+':'+String(values.start.getMinutes()).padStart(2, '0');
+		var endTime = String(values.end.getHours()).padStart(2, '0')+':'+String(values.end.getMinutes()).padStart(2, '0');
+		// var dayStr = day + '.' + m + '.' + year;		
         
-        var dayStr = day + '.' + m + '.' + year;
-
         // var row_id = random_id();
         var row_id = ajax_data.length + 1;
         
@@ -277,10 +293,10 @@ $(document).ready(function($)
         
         //add the row
         $('#displayArea').append('<tr row_id="'+row_id+'"><td> <div class="row_data" edit_type="click" col_name="title">' + 
-        values.title + '</div></td><td><div class="row_data" edit_type="click" col_name="date">' + 
-        dayStr + '</div></td><td><div class="row_data" edit_type="click" col_name="start">' + 
-        values.start + '</div></td><td><div class="row_data" edit_type="click" col_name="end">' + 
-        values.end + '</div></td>'+
+        values.title + '</div></td><td><input type="date" min="2018-01-01" max="2025-12-31" class="row_data" edit_type="click" col_name="date" value="' + 
+        dayStr + '" readonly></td><td><input type="time" min="09:00" max="18:00" class="row_data" edit_type="click" col_name="start" value="' + 
+        startTime + '"readonly></td><td><input type="time" min="09:00" max="18:00" class="row_data" edit_type="click" col_name="end" value="' + 
+        endTime + '" readonly></td>'+
         '<td>'+'<span class="btn_edit" > <a href="#" class="btn btn-link " row_id="'+row_id+'" > Edit</a> </span>'+
         '<span class="btn_save"> <a href="#" class="btn btn-link"  row_id="'+row_id+'"> Save</a> | </span>'+
         '<span class="btn_cancel"> <a href="#" class="btn btn-link" row_id="'+row_id+'"> Cancel</a> | </span>'+
